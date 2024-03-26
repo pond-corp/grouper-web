@@ -1,5 +1,5 @@
-/privacy 
+/privacy
 /discord
-/apply 
+/apply
 /group
 /play
