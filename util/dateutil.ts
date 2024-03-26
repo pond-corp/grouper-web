@@ -5,7 +5,14 @@
 // @kalrnlo
 // 25/03/2024
 
-// ported from: https://github.com/bubshurb/libraries/blob/main/src/dateUtil/methods/daysInMonth.luau
+/**
+ * Gets the amount of days in the given month for that year
+ * 
+ * Ported from: https://github.com/bubshurb/libraries/blob/main/src/dateUtil/methods/daysInMonth.luau
+ * @param month: number
+ * @param year: number
+ * @returns number
+ */
 export function days_in_month(month: number, year: number) {
 	if (month === 4 || month === 6 || month === 9 || month === 11) {
 		return 30
@@ -20,6 +27,12 @@ export function days_in_month(month: number, year: number) {
 	}
 }
 
+/**
+ * Gets the amount of days that have occured betwen 2 dates
+ * @param date1: Date
+ * @param date2: Date
+ * @returns number
+ */
 export function days_between_dates(date1: Date, date2 = new Date()) {
 	const y2 = date2.getUTCFullYear(),
 		m2 = date2.getUTCMonth(),
@@ -44,10 +57,48 @@ export function days_between_dates(date1: Date, date2 = new Date()) {
 	return days
 }
 
-export function pack_date(date = new Date) {
+/**
+ * Unpacks a bigint date into a date with the dates minutes, hours, day, month, and full year filled in.
+ * @param date_bigint: bigint
+ * @returns Date
+ */
+export function unpack_date_bigint(date_bigint: bigint) {
+	return new Date(
+		date_bigint >> 21n, 
+		((date_bigint >> 17n) & 0b111n) + 1,
+		(date_bigint >> 12n) & 0b11111n,
+		(date_bigint >> 6n) & 0b111111n,
+		date_bigint & 0b111111n
+	)
+}
+
+/**
+ * Packs the given dates minutes, hours, day, month, and full year into a bigint
+ * @param date: Date?
+ * @returns bigint
+ */
+export function pack_date_bigint(date = new Date) {
+	return BigInt(date.getUTCMinutes()) | 
+		BigInt(date.getUTCHours()) << 6n |
+		BigInt(date.getUTCDay()) << 12n |
+		BigInt(date.getUTCMonth() - 1) << 17n |
+		BigInt(date.getUTCFullYear()) << 21n
+}
+
+/**
+ * Packs the given dates day, month, and full year into a number
+ * @param date: Date?
+ * @returns number
+ */
+export function pack_date_u32(date = new Date) {
    return date.getUTCFullYear() << 9 | date.getUTCMonth() << 5 | date.getUTCDay()
 }
 
-export function unpack_date(u32date: number) {
-	return new Date(u32date >> 9, (u32date >> 5) & 0xF, u24date & 0x1F)
+/**
+ * Unpacks a u32 date into a date with the dates day, month, and full year filled in
+ * @param date_u32: number
+ * @returns Date
+ */
+export function unpack_date_u32(date_u32: number) {
+	return new Date(date_u32 >> 9, (date_u32 >> 5) & 0xF, date_u32 & 0x1F)
 }
