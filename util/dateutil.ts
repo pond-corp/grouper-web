@@ -33,7 +33,7 @@ export function days_in_month(month: number, year: number) {
  * @param date2: Date
  * @returns number
  */
-export function days_between_dates(date1: Date, date2 = new Date()) {
+export function days_between_dates(date1: Date, date2 = new Date()): number {
 	const y2 = date2.getUTCFullYear(),
 		m2 = date2.getUTCMonth(),
 		d2 = date2.getUTCDay();
@@ -62,7 +62,7 @@ export function days_between_dates(date1: Date, date2 = new Date()) {
  * @param date_bigint: bigint
  * @returns Date
  */
-export function unpack_date_bigint(date_bigint: bigint) {
+export function unpack_date_bigint(date_bigint: bigint): Date {
 	return new Date(
 		date_bigint >> 21n, 
 		((date_bigint >> 17n) & 0b111n) + 1,
@@ -77,7 +77,7 @@ export function unpack_date_bigint(date_bigint: bigint) {
  * @param date: Date?
  * @returns bigint
  */
-export function pack_date_bigint(date = new Date) {
+export function pack_date_bigint(date = new Date): bigint {
 	return BigInt(date.getUTCMinutes()) | 
 		BigInt(date.getUTCHours()) << 6n |
 		BigInt(date.getUTCDay()) << 12n |
@@ -90,7 +90,7 @@ export function pack_date_bigint(date = new Date) {
  * @param date: Date?
  * @returns number
  */
-export function pack_date_u32(date = new Date) {
+export function pack_date_u32(date = new Date): number {
    return date.getUTCFullYear() << 9 | date.getUTCMonth() << 5 | date.getUTCDay()
 }
 
@@ -99,6 +99,6 @@ export function pack_date_u32(date = new Date) {
  * @param date_u32: number
  * @returns Date
  */
-export function unpack_date_u32(date_u32: number) {
+export function unpack_date_u32(date_u32: number): Date {
 	return new Date(date_u32 >> 9, (date_u32 >> 5) & 0xF, date_u32 & 0x1F)
 }
