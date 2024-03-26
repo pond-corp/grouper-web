@@ -44,6 +44,10 @@ type message_result = {
 	ok: true,
 }
 
+type message_info = {
+	messaging_service_key: string,
+	universe_id: number,
+}
 
 const base_messaging_url = "https://apis.roblox.com/messaging-service/v1/universes/"
 const base_thumbnail_url = "https://thumbnails.roblox.com/v1/users/"
@@ -54,9 +58,7 @@ function timeout (ms: number): Promise<null> {
 }
 
 export class config  {
-	static messaging_service_key = ""
 	static retry_delay = 500
-	static universe_id = 0
 	static group_key = ""
 	static group_id = 0
 }
@@ -71,16 +73,16 @@ export class config  {
  * @param message The data to include in the message.
  * @returns message_result
  */
-export function publish_message(topic: string, message: string): Promise<message_result> {
+export function publish_message(topic: string, message: string, info: message_info): Promise<message_result> {
 	if (message.length > 1024) {
 		throw new Error("Message cannot be longer than 1024 characters")
 	} else if (topic.length > 80) {
 		throw new Error("Topic cannot be longer than 80 characters")
 	}
 
-	const responce = await fetch(base_messaging_url + `${this.config.universe_id}/topics/${topic}`,{
+	const responce = await fetch(base_messaging_url + `${info.universe_id}/topics/${topic}`,{
 		headers = {
-			"x-api-key": config.messaging_service_key,
+			"x-api-key": info.messaging_service_key,
 			"Content-Type": "application/json",
 		},
 		method = "post",
@@ -181,7 +183,7 @@ export class rbxapi {
 
 	// ive sinned
 	static get_membership_info_for_users(group: number, userids: Array<number>, maxpagesize: number?, pagetoken: string?): Promise<{membership_info: membership_info[], next_page_token: string}> {
-		const rank_sub_start_index = group.toString().length() + 13
+		const rank_sub_start_index = group.toString().length + 13
 		let filter: string
 
 		if (userids.length > 1) {
@@ -205,7 +207,7 @@ export class rbxapi {
 		if (pagetoken !== null) {
 			requesturl + `&pageToken=${pagetoken}`
 		}
-		let membership_info_array = new Array(userids.length())
+		let membership_info_array = new Array(userids.length)
 		let next_page_token
 
 		fetch(requesturl, { headers = new Headers("x-api-key", this.config.group_key) }).then(function(responce) {
