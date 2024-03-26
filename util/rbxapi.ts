@@ -1,9 +1,8 @@
 
-type rbxapiconfig = {
-	messaging_service_key: string,
-	group_api_key: string,
-	universe_id: number,
-}
+// rbxapi.ts
+// module containing wrapper functions for dealing with the roblox api
+// @kalrnlo
+// 25/03/2024
 
 const base_url = "https://apis.roblox.com/"
 
