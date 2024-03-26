@@ -28,8 +28,9 @@ type thumbnail_opts = {
 export class rbxapi {
 	static config = {
 		messaging_service_key = "",
-		group_api_key = "",
+		retry_delay = 500,
 		universe_id = 0,
+		group_key = "",
 	}
 
 	static get_membership_info_for_users(group: number, userids: Array<number>, maxpagesize: number?, pagetoken: string?) {
@@ -60,7 +61,7 @@ export class rbxapi {
 		let membership_info_array = new Array(userids.length())
 		let next_page_token
 
-		fetch(requesturl, { headers = new Headers("x-api-key", this.config.group_api_key) }).then(function(responce) {
+		fetch(requesturl, { headers = new Headers("x-api-key", this.config.group_key) }).then(function(responce) {
 			responce.json().then(function(jsonobj) {
 				next_page_token = jsonobj.nextPageToken
 				let index = 0
@@ -119,12 +120,17 @@ export class rbxapi {
 		}
 	}
 
+	// based on: https://github.com/noblox/noblox.js/blob/master/lib/thumbnails/getPlayerThumbnail.js
 	static get_thumbnails(
 		type: avatar_thumbnail_type,
 		size: avatar_thumbnail_size,
 		user_ids: number[],
 		opts: thumbnail_opts?,
 	) {
+		if (user_ids.length > 100) {
+			return Promise.reject("cannot get more than 100 thumbnails in bulk at a time")
+		}
+
 		const is_circular = opts.is_circular !== null ? opts.is_circular : false
 		const max_retrys = opts.max_retrys || 10
 		const format = opts.format || "jpeg"
@@ -138,43 +144,6 @@ export class rbxapi {
 }
 
 function getPlayerThumbnail (userIds, size, format = 'png', isCircular = false, cropType = 'body', retryCount = settings.maxRetries) {
-	// Validate userIds
-	if (Array.isArray(userIds)) {
-	  if (userIds.some(isNaN)) {
-		throw new Error('userIds must be a number or an array of numbers')
-	  }
-	  userIds = [...new Set(userIds)] // get rid of duplicates, endpoint response does this anyway
-	  if (userIds.length > 100) {
-		throw new Error(`too many userIds provided (${userIds.length}); maximum 100`)
-	  }
-	} else {
-	  if (isNaN(userIds)) {
-		throw new Error('userId is not a number')
-	  }
-	  userIds = [userIds]
-	}
-  
-	// Validate cropType
-	cropType = cropType.toLowerCase()
-	if (!Object.keys(eligibleSizes).includes(cropType)) {
-	  throw new Error(`Invalid cropping type provided: ${cropType} | Use: ${Object.keys(eligibleSizes).join(', ')}`)
-	}
-	const { sizes, endpoint } = eligibleSizes[cropType]
-  
-	// Validate size
-	size = size || sizes[sizes.length - 1]
-	if (typeof size === 'number') {
-	  size = `${size}x${size}`
-	}
-	if (!sizes.includes(size)) {
-	  throw new Error(`Invalid size parameter provided: ${size} | [${cropType.toUpperCase()}] Use: ${sizes.join(', ')}`)
-	}
-  
-	// Validate format
-	if (format.toLowerCase() !== 'png' && format.toLowerCase() !== 'jpeg') {
-	  throw new Error(`Invalid image type provided: ${format} | Use: png, jpeg`)
-	}
-  
 	return http({
 	  url: `https://thumbnails.roblox.com/v1/users/${endpoint}?userIds=${userIds.join(',')}&size=${size}&format=${format}&isCircular=${!!isCircular}`,
 	  options: {
