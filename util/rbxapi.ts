@@ -160,7 +160,7 @@ export class rbxapi {
 	
 						if (pending_thumbnails.length > 0) {
 							// small delay helps cache populate on Roblox's end; default 500ms
-							await timeout(this.config.retry_delay) // small delay helps cache populate on Roblox's end; default 500ms
+							await timeout(this.config.retry_delay)
 							
 							--opts.max_retrys
 							// Recursively retry for # of maxRetries attempts; default 2
