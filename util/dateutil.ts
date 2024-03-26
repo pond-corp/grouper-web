@@ -30,10 +30,7 @@ export function days_between_dates(date1: Date, date2 = new Date()) {
 	let days = 0
 
 	while (d1 < d2 || m1 < m2 || y1 < y1) {
-		const daysincurrentmonth = days_in_month(m1, y1)
-		d1++
-
-		if (d1 > daysincurrentmonth) {
+		if (d1++ > days_in_month(m1, y1)) {
 			d1 = 1
 			m1++
 
