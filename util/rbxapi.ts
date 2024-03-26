@@ -19,10 +19,25 @@ type avatar_bust_sizes = "48x48" | "50x50" | "60x60" | "75x75" | "100x100" | "15
 
 type avatar_thumbnail_size = avatar_headshot_sizes | avatar_body_sizes | avatar_bust_sizes
 
+type PlayerThumbnailData = {
+	imageUrl: string,
+	targetId: number,
+	state: string,
+}
+
 type thumbnail_opts = {
 	format: "png" | "jpeg"?,
 	is_circular: boolean?,
 	max_retrys: number?,
+}
+
+type membership_info = {
+	user_id: string,
+	rank: number,
+}
+
+function timeout (ms: number): Promise<any> {
+	return new Promise(resolve => { setTimeout(resolve, ms) })
 }
 
 export class rbxapi {
@@ -33,7 +48,8 @@ export class rbxapi {
 		group_key = "",
 	}
 
-	static get_membership_info_for_users(group: number, userids: Array<number>, maxpagesize: number?, pagetoken: string?) {
+	// ive sinned
+	static get_membership_info_for_users(group: number, userids: Array<number>, maxpagesize: number?, pagetoken: string?): Promise<{membership_info: membership_info[], next_page_token: string}> {
 		const rank_sub_start_index = group.toString().length() + 13
 		let filter: string
 
@@ -62,6 +78,7 @@ export class rbxapi {
 		let next_page_token
 
 		fetch(requesturl, { headers = new Headers("x-api-key", this.config.group_key) }).then(function(responce) {
+			// fix to handle roblox error codes
 			responce.json().then(function(jsonobj) {
 				next_page_token = jsonobj.nextPageToken
 				let index = 0
@@ -69,25 +86,21 @@ export class rbxapi {
 				for ([key, value] in Object.entries(jsonobj.groupMemberships)) {
 					membership_info_array[index] = {
 						user_id = (value.user as string).substring(6),
-						rank = (value.role as string).substring(rank_sub_start_index)
+						rank = Number((value.role as string).substring(rank_sub_start_index))
 					}
 					
 					index++
 				}
-			}, (reason) => console.error)
-		}, (reason) => console.error)
+			}, (reason) => {console.error(reason)})
+		}, (reason) => {console.error(reason)})
 
-		if (nextpagetoken !== null) {
-			return Promise.resolve({
-				membership_info_array = membership_info_array as {
-					user_id: string,
-					rank: string,
-				}[],
-				next_page_token = next_page_token as string,
-			})
-		} else {
-			return Promise.reject()
-		}
+		return nextpagetoken !== null ? Promise.resolve({
+			membership_info = membership_info_array as {
+				user_id: string,
+				rank: string,
+			}[],
+			next_page_token = next_page_token as string,
+		}) : Promise.reject()
 	}
 
 	static send_message(topic: string, message: string): Promise<null> {
@@ -108,10 +121,11 @@ export class rbxapi {
 			},
 			method = "POST",
 		}).then(function(responce) {
+			// fix to handle roblox error codes
 			responce.json().then(function(jsonobj) {
 				success = Object.keys(jsonobj.body).length === 0
-			}, (reason) => console.error)
-		}, (reason) => console.error)
+			}, (reason) => {console.error(reason)})
+		}, (reason) => {console.error(reason)})
 
 		if (success === true) {
 			return Promise.resolve("")
@@ -126,59 +140,56 @@ export class rbxapi {
 		size: avatar_thumbnail_size,
 		user_ids: number[],
 		opts: thumbnail_opts?,
-	) {
+	): Promise<PlayerThumbnailData[]> {
 		if (user_ids.length > 100) {
 			return Promise.reject("cannot get more than 100 thumbnails in bulk at a time")
 		}
 
 		const is_circular = opts.is_circular !== null ? opts.is_circular : false
-		const max_retrys = opts.max_retrys || 10
+		const max_retrys = opts.max_retrys || 2
 		const format = opts.format || "jpeg"
+		let result
 
 		fetch(
 			`https://thumbnails.roblox.com/v1/users/${type}?userIds=${user_ids.join(",")}&size=${size}&format=${format}&isCircular=${is_circular}`, {
 				"Content-Type": "application/json",
 			}
-		).then()
+		).then(async(responce) => {
+			if (responce.status === 200) {
+				responce.json().then(function(data) {
+					if (max_retrys > 0) {
+						// Get 'Pending' thumbnails as array of userIds
+						const pending_thumbnails = data.filter(obj => { return obj.state === 'Pending' }).map(obj => obj.targetId)
+	
+						if (pending_thumbnails.length > 0) {
+							// small delay helps cache populate on Roblox's end; default 500ms
+							await timeout(this.config.retry_delay) // small delay helps cache populate on Roblox's end; default 500ms
+							
+							--opts.max_retrys
+							// Recursively retry for # of maxRetries attempts; default 2
+							const updated_pending = await this.get_thumbnails(type, size, pending_thumbnails, opts)
+							// Update primary array's values
+							data = data.map(obj => updated_pending.find(o => o.targetId === obj.targetId) || obj)
+						}
+					}
+
+					data = data.map(obj => {
+						if (obj.state !== 'Completed') {
+						  obj.imageUrl = `https://noblox.js.org/moderatedThumbnails/moderatedThumbnail_${size}.png`
+						}
+						return obj
+					})
+					result = data
+				}, (reason) => {console.error(reason)})
+			} else if (responce.status === 400) {
+				console.error(`Error Code ${responce.status}: ${responce.statusText}, type: ${type}, user_ids: ${user_ids.join(',')}, size: ${size}, is_circular: ${is_circular}`)
+			} else {
+				console.error(`An unknown error occurred with get_thumbnail(), type: ${type}, user_ids: ${user_ids.join(',')}, size: ${size}, is_circular: ${is_circular}`)
+			}
+ 		}, (reason) => {console.error(reason)})
+
+		return result !== null ? Promise.resolve(result) : Promise.reject()
 	}
 }
 
-function getPlayerThumbnail (userIds, size, format = 'png', isCircular = false, cropType = 'body', retryCount = settings.maxRetries) {
-	return http({
-	  url: `https://thumbnails.roblox.com/v1/users/${endpoint}?userIds=${userIds.join(',')}&size=${size}&format=${format}&isCircular=${!!isCircular}`,
-	  options: {
-		resolveWithFullResponse: true,
-		followRedirect: true
-	  }
-	})
-	  .then(async ({ statusCode, body }) => {
-		let { data, errors } = JSON.parse(body)
-		if (statusCode === 200) {
-		  if (retryCount > 0) {
-			const pendingThumbnails = data.filter(obj => { return obj.state === 'Pending' }).map(obj => obj.targetId) // Get 'Pending' thumbnails as array of userIds
-			if (pendingThumbnails.length > 0) {
-			  await timeout(settings.retryDelay) // small delay helps cache populate on Roblox's end; default 500ms
-			  const updatedPending = await getPlayerThumbnail(pendingThumbnails, size, format, isCircular, cropType, --retryCount) // Recursively retry for # of maxRetries attempts; default 2
-			  data = data.map(obj => updatedPending.find(o => o.targetId === obj.targetId) || obj) // Update primary array's values
-			}
-		  }
-		  data = data.map(obj => {
-			if (obj.state !== 'Completed') {
-			  const settingsUrl = settings.failedUrl[obj.state.toLowerCase()] // user defined settings.json default image URL for blocked or pending thumbnails; default ""
-			  obj.imageUrl = settingsUrl || `https://noblox.js.org/moderatedThumbnails/moderatedThumbnail_${size}.png`
-			}
-			return obj
-		  })
-		  return data
-		} else if (statusCode === 400) {
-		  throw new Error(`Error Code ${errors.code}: ${errors.message} | endpoint: ${endpoint}, userIds: ${userIds.join(',')}, size: ${size}, isCircular: ${!!isCircular}`)
-		} else {
-		  throw new Error(`An unknown error occurred with getPlayerThumbnail() | endpoint: ${endpoint}, userIds: ${userIds.join(',')}, size: ${size}, isCircular: ${!!isCircular}`)
-		}
-	  })
-  }
-  
-  function timeout (ms) {
-	return new Promise(resolve => { setTimeout(resolve, ms) })
-  }
-  
+
