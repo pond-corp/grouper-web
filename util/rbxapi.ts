@@ -94,12 +94,8 @@ export class rbxapi {
 			}, (reason) => {console.error(reason)})
 		}, (reason) => {console.error(reason)})
 
-		return nextpagetoken !== null ? Promise.resolve({
-			membership_info = membership_info_array as {
-				user_id: string,
-				rank: string,
-			}[],
-			next_page_token = next_page_token as string,
+		return nextpagetoken !== null ? Promise.resolve({membership_info = membership_info_array,
+			next_page_token = next_page_token,
 		}) : Promise.reject()
 	}
 
