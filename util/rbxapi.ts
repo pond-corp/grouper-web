@@ -12,12 +12,6 @@ export class rbxapi {
 		messaging_service_key = "",
 		group_api_key = "",
 		universe_id = 0,
-	} as rbxapiconfig
-
-	static setup(config: rbxapiconfig?) {
-		if (config !== null) {
-			this.config = config
-		}
 	}
 
 	static send_message(topic: string, message: string) {
@@ -39,7 +33,7 @@ export class rbxapi {
 			method = "POST",
 		}).then(function(responce) {
 			responce.json().then(function(jsonobj) {
-				success = jsonobj.body.keys().length === 0
+				success = Object.keys(jsonobj.body).length === 0
 			}, (reason) => console.error)
 		}, (reason) => console.error)
 
@@ -52,7 +46,7 @@ export class rbxapi {
 
 	static get_membership_info_for_users(group: number, userids: Array<number>, maxpagesize: number?, pagetoken: string?) {
 		const rank_sub_start_index = group.toString().length() + 13
-		let filter
+		let filter: string
 
 		if (userids.length > 1) {
 			filter = `filter="user in [`
@@ -97,7 +91,7 @@ export class rbxapi {
 		if (nextpagetoken !== null) {
 			return Promise.resolve({
 				membership_info_array = membership_info_array as {
-					userid: string,
+					user_id: string,
 					rank: string,
 				}[],
 				next_page_token = next_page_token as string,
