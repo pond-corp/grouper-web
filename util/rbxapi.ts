@@ -13,36 +13,6 @@ export class rbxapi {
 		universe_id = 0,
 	}
 
-	static send_message(topic: string, message: string) {
-		if (message.length() > 1024) {
-			return Promise.reject("message cannot be longer than 1024 characters")
-		} else if (topic.length() > 80) {
-			return Promise.reject("topic cannot be longer than 80 characters")
-		}
-		let success = false
-
-		fetch(base_url + `messaging-service/v1/universes/${this.config.universe_id}/topics/${topic}`, {
-			headers = new Headers({
-				"x-api-key": this.config.messaging_service_key,
-				"Content-Type": "application/json",
-			}),
-			body = {
-				"message": message,
-			},
-			method = "POST",
-		}).then(function(responce) {
-			responce.json().then(function(jsonobj) {
-				success = Object.keys(jsonobj.body).length === 0
-			}, (reason) => console.error)
-		}, (reason) => console.error)
-
-		if (success === true) {
-			return Promise.resolve("")
-		} else {
-			return Promise.reject("roblox api experienced an error")
-		}
-	}
-
 	static get_membership_info_for_users(group: number, userids: Array<number>, maxpagesize: number?, pagetoken: string?) {
 		const rank_sub_start_index = group.toString().length() + 13
 		let filter: string
@@ -97,6 +67,36 @@ export class rbxapi {
 			})
 		} else {
 			return Promise.reject()
+		}
+	}
+
+	static send_message(topic: string, message: string): Promise<null> {
+		if (message.length() > 1024) {
+			return Promise.reject("message cannot be longer than 1024 characters")
+		} else if (topic.length() > 80) {
+			return Promise.reject("topic cannot be longer than 80 characters")
+		}
+		let success = false
+
+		fetch(base_url + `messaging-service/v1/universes/${this.config.universe_id}/topics/${topic}`, {
+			headers = new Headers({
+				"x-api-key": this.config.messaging_service_key,
+				"Content-Type": "application/json",
+			}),
+			body = {
+				"message": message,
+			},
+			method = "POST",
+		}).then(function(responce) {
+			responce.json().then(function(jsonobj) {
+				success = Object.keys(jsonobj.body).length === 0
+			}, (reason) => console.error)
+		}, (reason) => console.error)
+
+		if (success === true) {
+			return Promise.resolve("")
+		} else {
+			return Promise.reject("roblox api experienced an error")
 		}
 	}
 
