@@ -69,11 +69,6 @@ export class config  {
 	static group_id = 0
 }
 
-type server_map = Map<string, {
-	current_players: number,
-	max_players: number,
-}>
-
 export function get_place_servers(place_id: number, max_servers_to_fetch: 10 | 25 | 50 | 100 = 25): Promise<server_map> {
 	const responce = await fetch(base_games_url + `${place_id}/servers/0?limit=${max_servers_to_fetch}`,{
 		headers = {
