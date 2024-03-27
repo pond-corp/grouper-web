@@ -1,0 +1,19 @@
+{
+  "name": "grouper-web",
+  "version": "0.0.0",
+  "description": "none",
+  "main": "./functions/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pond-corp/grouper-web.git"
+  },
+  "author": "kalrnlo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pond-corp/grouper-web/issues"
+  },
+  "homepage": "https://github.com/pond-corp/grouper-web#readme"
+}
