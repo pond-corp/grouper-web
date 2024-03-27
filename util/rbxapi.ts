@@ -2,7 +2,7 @@
 // rbxapi.ts
 // module containing wrapper functions for dealing with the roblox api
 // @kalrnlo
-// 26/03/2024
+// 27/03/2024
 
 type avatar_headshot_sizes = "48x48" | "50x50" | "60x60" | "75x75" | "100x100" | "110x110" | "150x150" | "180x180" |
 	"352x352" | "420x420" | "720x720"
@@ -16,11 +16,6 @@ type avatar_bust_sizes = "48x48" | "50x50" | "60x60" | "75x75" | "100x100" | "15
 type avatar_thumbnail_size = avatar_headshot_sizes | avatar_body_sizes | avatar_bust_sizes
 
 type avatar_thumbnail_type = "avatar" | "avatar-bust" | "avatar-headshot"
-
-type server_map = Map<string, {
-	current_players: number,
-	max_players: number,
-}>
 
 type PlayerThumbnailData = {
 	imageUrl: string,
@@ -54,6 +49,12 @@ type message_info = {
 	universe_id: number,
 }
 
+type servers = {
+	current_players: number,
+	max_players: number,
+	job_id: string,
+}[]
+
 const base_messaging_url = "https://apis.roblox.com/messaging-service/v1/universes/"
 const base_thumbnail_url = "https://thumbnails.roblox.com/v1/users/"
 const base_groups_url = "https://apis.roblox.com/cloud/v2/groups/"
@@ -69,7 +70,7 @@ export class config  {
 	static group_id = 0
 }
 
-export function get_place_servers(place_id: number, max_servers_to_fetch: 10 | 25 | 50 | 100 = 25): Promise<server_map> {
+export function get_place_servers(place_id: number, max_servers_to_fetch: 10 | 25 | 50 | 100 = 25): Promise<servers> {
 	const responce = await fetch(base_games_url + `${place_id}/servers/0?limit=${max_servers_to_fetch}`,{
 		headers = {
 			"Content-Type": "application/json",
@@ -77,20 +78,25 @@ export function get_place_servers(place_id: number, max_servers_to_fetch: 10 | 2
 	})
 
 	if (responce.status == 200) {
+		const servers = new Array(max_servers_to_fetch) as servers
 		const json = await responce.json()
-		const servers = new Map()
+		let index = 0
 
 		for (const server_data in json) {
-			servers[server_data.id] = {
+			servers[index] = {
 				current_players = server_data.playing,
 				max_players = server_data.maxPlayers,
+				job_id = server_data.id,
 			}
+			index++
 		}
 		return Promise.resolve(servers)
 	} else {
 		throw new Error(responce.statusText)
 	}
 }
+
+const lol = get_place_servers(1010,20)
 
 /**
  * This function sends the provided message to all subscribers to the topic,
@@ -123,6 +129,7 @@ export function publish_message(topic: string, message: string, info: message_in
 	if (responce.status === 200) {
 		// If successful, it will return empty response body
 		const body: string = await response.text()
+		responce.text()
 
 		if (body.length === 0) {
 			return Promise.resolve({
