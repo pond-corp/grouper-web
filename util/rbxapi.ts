@@ -17,6 +17,11 @@ type avatar_thumbnail_size = avatar_headshot_sizes | avatar_body_sizes | avatar_
 
 type avatar_thumbnail_type = "avatar" | "avatar-bust" | "avatar-headshot"
 
+type server_map = Map<string, {
+	current_players: number,
+	max_players: number,
+}>
+
 type PlayerThumbnailData = {
 	imageUrl: string,
 	targetId: number,
@@ -52,6 +57,7 @@ type message_info = {
 const base_messaging_url = "https://apis.roblox.com/messaging-service/v1/universes/"
 const base_thumbnail_url = "https://thumbnails.roblox.com/v1/users/"
 const base_groups_url = "https://apis.roblox.com/cloud/v2/groups/"
+const base_games_url = "https://games.roblox.com/v1/games/"
 
 function timeout (ms: number): Promise<null> {
 	return new Promise(resolve => { setTimeout(resolve, ms) })
@@ -61,6 +67,34 @@ export class config  {
 	static retry_delay = 500
 	static group_key = ""
 	static group_id = 0
+}
+
+type server_map = Map<string, {
+	current_players: number,
+	max_players: number,
+}>
+
+export function get_place_servers(place_id: number, max_servers_to_fetch: 10 | 25 | 50 | 100 = 25): Promise<server_map> {
+	const responce = await fetch(base_games_url + `${place_id}/servers/0?limit=${max_servers_to_fetch}`,{
+		headers = {
+			"Content-Type": "application/json",
+		}
+	})
+
+	if (responce.status == 200) {
+		const json = await responce.json()
+		const servers = new Map()
+
+		for (const server_data in json) {
+			servers[server_data.id] = {
+				current_players = server_data.playing,
+				max_players = server_data.maxPlayers,
+			}
+		}
+		return Promise.resolve(servers)
+	} else {
+		throw new Error(responce.statusText)
+	}
 }
 
 /**
