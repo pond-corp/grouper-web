@@ -92,7 +92,11 @@ export async function get_place_servers(place_id: number, max_servers_to_fetch: 
 		}
 		return Promise.resolve(servers)
 	} else {
-		throw new Error(responce.statusText)
+		return Promise.reject({
+			status_text: responce.statusText,
+			status: responce.status,
+			ok: false,
+		})
 	}
 }
 
