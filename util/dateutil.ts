@@ -3,7 +3,9 @@
 // module containing utility functions for bitpacking dates, and other
 // date & time releated functions
 // @kalrnlo
-// 25/03/2024
+// 27/03/2024
+
+const one_bigint = BigInt(1)
 
 /**
  * Gets the amount of days in the given month for that year
@@ -64,11 +66,11 @@ export function days_between_dates(date1: Date, date2 = new Date()): number {
  */
 export function unpack_date_bigint(date_bigint: bigint): Date {
 	return new Date(
-		date_bigint >> 21n, 
-		((date_bigint >> 17n) & 0b111n) + 1,
-		(date_bigint >> 12n) & 0b11111n,
-		(date_bigint >> 6n) & 0b111111n,
-		date_bigint & 0b111111n
+		Number(date_bigint >> 21n), 
+		Number(((date_bigint >> 17n) & 0b111n) + one_bigint),
+		Number((date_bigint >> 12n) & 0b11111n),
+		Number((date_bigint >> 6n) & 0b111111n),
+		Number(date_bigint & 0b111111n)
 	)
 }
 

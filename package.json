@@ -1,6 +1,6 @@
 {
   "name": "grouper-web",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "none",
   "main": "./functions/index.ts",
   "scripts": {
@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/pond-corp/grouper-web/issues"
   },
-  "homepage": "https://github.com/pond-corp/grouper-web#readme"
+  "homepage": "https://github.com/pond-corp/grouper-web#readme",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240320.1",
+    "mocha": "^10.4.0",
+    "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "itty-router": "^4.2.2"
+  }
 }

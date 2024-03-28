@@ -1,3 +1,28 @@
+import {scheduler} from '@cloudflare/workers-types'
+import { Router } from "itty-router"
 
-import { pack_date_u32, unpack_date_u32, days_between_dates } from "../../util/dateutil";
-import { get_thumbnails } from "../../util/rbxapi";
+const router = Router()
+
+router.delete("/destroy", function() {
+    
+})
+
+router.post("/create", function() {
+
+})
+
+router.post("/submit", function() {
+    
+})
+
+router.patch("/edit", function() {
+    
+})
+
+router.post("/pass", function() {
+    
+})
+
+router.post("/fail", function() {
+    
+})

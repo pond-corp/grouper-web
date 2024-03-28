@@ -24,9 +24,9 @@ type PlayerThumbnailData = {
 }
 
 type thumbnail_opts = {
-	format: "png" | "jpeg"?,
-	is_circular: boolean?,
-	max_retrys: number?,
+	format: "png" | "jpeg",
+	is_circular: boolean,
+	max_retrys: number,
 }
 
 type membership_info = {
@@ -70,23 +70,23 @@ export class config  {
 	static group_id = 0
 }
 
-export function get_place_servers(place_id: number, max_servers_to_fetch: 10 | 25 | 50 | 100 = 25): Promise<servers> {
+export async function get_place_servers(place_id: number, max_servers_to_fetch: 10 | 25 | 50 | 100 = 25): Promise<servers> {
 	const responce = await fetch(base_games_url + `${place_id}/servers/0?limit=${max_servers_to_fetch}`,{
-		headers = {
+		headers: {
 			"Content-Type": "application/json",
 		}
 	})
 
 	if (responce.status == 200) {
 		const servers = new Array(max_servers_to_fetch) as servers
-		const json = await responce.json()
+		const json: any = await responce.json()
 		let index = 0
 
 		for (const server_data in json) {
 			servers[index] = {
-				current_players = server_data.playing,
-				max_players = server_data.maxPlayers,
-				job_id = server_data.id,
+				current_players: (server_data as any).playing,
+				max_players: (server_data as any).maxPlayers,
+				job_id: (server_data as any).id,
 			}
 			index++
 		}
@@ -95,8 +95,6 @@ export function get_place_servers(place_id: number, max_servers_to_fetch: 10 | 2
 		throw new Error(responce.statusText)
 	}
 }
-
-const lol = get_place_servers(1010,20)
 
 /**
  * This function sends the provided message to all subscribers to the topic,
@@ -108,28 +106,27 @@ const lol = get_place_servers(1010,20)
  * @param message The data to include in the message.
  * @returns message_result
  */
-export function publish_message(topic: string, message: string, info: message_info): Promise<message_result> {
+export async function publish_message(topic: string, message: string, info: message_info): Promise<message_result> {
 	if (message.length > 1024) {
 		throw new Error("Message cannot be longer than 1024 characters")
 	} else if (topic.length > 80) {
 		throw new Error("Topic cannot be longer than 80 characters")
 	}
 
-	const responce = await fetch(base_messaging_url + `${info.universe_id}/topics/${topic}`,{
-		headers = {
+	const response = await fetch(base_messaging_url + `${info.universe_id}/topics/${topic}`,{
+		headers: {
 			"x-api-key": info.messaging_service_key,
 			"Content-Type": "application/json",
 		},
-		method = "post",
-		body = JSON.stringify({
-			message = message
+		method: "post",
+		body: JSON.stringify({
+			message: message
 		})
 	})
 
-	if (responce.status === 200) {
+	if (response.status === 200) {
 		// If successful, it will return empty response body
-		const body: string = await response.text()
-		responce.text()
+		const body = await response.text()
 
 		if (body.length === 0) {
 			return Promise.resolve({
@@ -152,32 +149,31 @@ export function publish_message(topic: string, message: string, info: message_in
  * 
  * Modified from: https://github.com/noblox/noblox.js/blob/master/lib/thumbnails/getPlayerThumbnail.js
  */
-export function get_thumbnails(
+export async function get_thumbnails(
 	type: avatar_thumbnail_type,
 	size: avatar_thumbnail_size,
 	user_ids: number[],
-	opts: thumbnail_opts?,
+	opts: thumbnail_opts = {
+		is_circular: false,
+		max_retrys: 2,
+		format: "jpeg",
+	}
 ): Promise<PlayerThumbnailData[]> {
 	if (user_ids.length > 100) {
 		throw new Error("Cannot get more than 100 thumbnails at a time")
 	}
 
-	const is_circular = opts.is_circular !== null ? opts.is_circular : false
-	const max_retrys = opts.max_retrys || 2
-	const format = opts.format || "jpeg"
-	const opts = opts || {}
-	
-	opts.max_retrys = max_retrys
-
-	const url = base_thumbnail_url + `${type}?userIds=${user_ids.join(",")}&size=${size}&format=${format}&isCircular=${is_circular}`
+	const url = base_thumbnail_url + `${type}?userIds=${user_ids.join(",")}&size=${size}&format=${opts.format}&isCircular=${opts.is_circular}`
 	const responce = await fetch(url, {
-		"Content-Type": "application/json",
+		headers: {
+			"Content-Type": "application/json",
+		}
 	})
 
 	if (responce.status === 200) {
 		let data = await responce.json()
 
-		if (max_retrys > 0) {
+		if (opts.max_retrys > 0) {
 			// Get 'Pending' thumbnails as array of userIds
 			const pending_thumbnails = data.filter(obj => { return obj.state === 'Pending' }).map(obj => obj.targetId)
 
@@ -201,9 +197,9 @@ export function get_thumbnails(
 		})
 		return Promise.resolve(data)
 	} else if (responce.status === 400) {
-		throw new Error(`Error Code ${responce.status}: ${responce.statusText}, type: ${type}, user_ids: ${user_ids.join(',')}, size: ${size}, is_circular: ${is_circular}`)
+		throw new Error(`Error Code ${responce.status}: ${responce.statusText}, type: ${type}, user_ids: ${user_ids.join(',')}, size: ${size}, is_circular: ${opts.is_circular}`)
 	} else {
-		throw new Error(`An unknown error occurred with get_thumbnail(), type: ${type}, user_ids: ${user_ids.join(',')}, size: ${size}, is_circular: ${is_circular}`)
+		throw new Error(`An unknown error occurred with get_thumbnail(), type: ${type}, user_ids: ${user_ids.join(',')}, size: ${size}, is_circular: ${opts.is_circular}`)
 	}
 }
 
