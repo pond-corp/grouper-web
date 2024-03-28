@@ -11,4 +11,4 @@ export type config = {
 }
 
 const config_json = fs.readFileSync("./config.json").toString("utf8")
-export const config = JSON.parse(config_json)
+export const config = JSON.parse(config_json) as config
