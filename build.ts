@@ -5,8 +5,9 @@
 // 29/03/2024
 
 import { config } from "./config";
-import util from "node/node_modules/.bin/util";
-import fs from "node/node_modules/.bin/fs";
+import inspect from "typia";
+import util from "node:util";
+import fs from "node:fs";
 
 // checking if the config is not an object, function, or promise
 if (

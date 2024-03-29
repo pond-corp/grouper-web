@@ -1,20 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "commonjs",
+    "allowJs": true,
+    "checkJs": true,
+    "target": "ES2023",
+    "module": "Node16",
     "declaration": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "Node16",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "noUnusedLocals": false,
     "noUnusedParameters": true,
-    "types": [
-      "mocha",
-      "node",
-      "@cloudflare/workers-types"
-    ],
     "plugins": [
       {
         "transform": "typia/lib/transform"
@@ -22,13 +19,6 @@
     ],
     "strictNullChecks": true
   },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
-  "include": [
-    "src",
-    "build.ts",
-    "config.ts"
-  ]
+  "exclude": ["node_modules", "dist"],
+  "include": ["src", "build.ts", "config.ts"]
 }
