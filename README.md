@@ -1,3 +1,1 @@
-# Grouper Web
-
-###### By Kalrnlo
+### grouper-web
