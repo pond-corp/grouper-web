@@ -22,6 +22,7 @@
     "@lit/localize-tools": "^0.7.2",
     "miniflare": "^3.20240320.1",
     "mocha": "^10.4.0",
+    "playground-elements": "^0.18.1",
     "ts-node": "^10.9.2",
     "ts-patch": "^3.1.2",
     "typescript": "^5.4.2"
@@ -33,6 +34,8 @@
     "@lit-labs/observers": "^2.0.2",
     "@lit-labs/virtualizer": "^2.0.12",
     "@lit/localize": "^0.12.1",
+    "@lit/task": "^1.0.0",
+    "@lit/ts-transformers": "^2.0.1",
     "@material/material-color-utilities": "^0.2.7",
     "@material/web": "^1.4.0",
     "fastest-levenshtein": "^1.0.16",
