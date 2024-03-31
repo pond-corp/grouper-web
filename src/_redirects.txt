@@ -1,5 +1,0 @@
-/privacy
-/discord
-/apply
-/group
-/play
