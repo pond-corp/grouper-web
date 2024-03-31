@@ -14,5 +14,5 @@
     "strictNullChecks": true
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["src", "build.ts", "config.ts"]
+  "include": ["src", "build.ts", "config.ts", "config_types.ts"]
 }

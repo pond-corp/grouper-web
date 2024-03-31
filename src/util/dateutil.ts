@@ -67,7 +67,7 @@ export function unpack_date_bigint(date_bigint: bigint): Date {
     Number(((date_bigint >> 17n) & 0b111n) + 1n),
     Number((date_bigint >> 12n) & 0b11111n),
     Number((date_bigint >> 6n) & 0b111111n),
-    Number(date_bigint & 0b111111n),
+    Number(date_bigint & 0b111111n)
   );
 }
 
