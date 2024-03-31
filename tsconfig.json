@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
     "target": "ES2023",
     "module": "Node16",
     "declaration": true,
@@ -12,11 +10,7 @@
     "skipLibCheck": false,
     "noUnusedLocals": false,
     "noUnusedParameters": true,
-    "plugins": [
-      {
-        "transform": "typia/lib/transform"
-      }
-    ],
+    "plugins": [{ "transform": "typia/lib/transform" }],
     "strictNullChecks": true
   },
   "exclude": ["node_modules", "dist"],
