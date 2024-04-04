@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ES2023",
-    "module": "Node16",
+    "target": "ESNext",
+    "module": "ESNext",
     "declaration": true,
-    "moduleResolution": "Node16",
+    "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -11,6 +11,14 @@
     "noUnusedLocals": false,
     "noUnusedParameters": true,
     "plugins": [{ "transform": "typia/lib/transform" }],
+    "types": [
+      "@cloudflare/workers-types"
+    ],
+    "lib": [
+      "ESNext",
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
     "strictNullChecks": true
   },
   "exclude": ["node_modules", "dist"],
