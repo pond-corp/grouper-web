@@ -38,6 +38,20 @@ generated_conifg.then(
       console.error(`Config provided is invalid\n\t${result.errors}`);
       return;
     }
+    const universe_ids = new Array();
+
+    for (const [place_name, place_data] of Object.entries(
+      config_object.places
+    )) {
+      if (!universe_ids.includes(place_data.universe_id)) {
+        universe_ids.push(place_data.universe_id);
+      }
+    }
+
+    const universe_ids_string = util.inspect(universe_ids, {
+      depth: Infinity,
+      compact: false,
+    });
 
     const config_string = util.inspect(config_object, {
       depth: Infinity,
@@ -46,7 +60,8 @@ generated_conifg.then(
 
     fs.writeFileSync(
       "../src/util/config.ts",
-      config_header + `export const config = Object.freeze(${config_string})`
+      config_header +
+        `export const config = Object.freeze(${config_string})\n\texport const universe_ids = Object.freeze(${universe_ids_string})`
     );
   },
   function (reason) {

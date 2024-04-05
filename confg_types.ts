@@ -18,7 +18,7 @@ export interface config_template {
   places: {
     [place_name: string]: {
       use_direct_join_urls: boolean;
-      universe_id: number;
+      universe_id: string;
       place_id: number;
     };
   };
