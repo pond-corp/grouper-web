@@ -15,8 +15,9 @@ const request_counts: Map<string, number> = new Map()
 const odic_middleware = oidcAuthMiddleware();
 const roblox_asns = Array(22697, 132203);
 const socials = config.socials;
+const rate_limit_ms = 60000
 const rate_limit = 60 * 100
-const max_requests = 60
+const max_requests = 48
 const app = new Hono();
 
 app.use("/api/*", async (ctx, next) => {
@@ -74,7 +75,7 @@ export default {
 
 		if (!request_count) {
 			request_count = 1
-			setTimeout((a) => request_counts.delete(a), timeout, ip)
+			setTimeout((a) => request_counts.delete(a), rate_limit_ms, ip)
 			request_counts[ip] = request_count
 		}
 	  
@@ -83,7 +84,7 @@ export default {
 				status: 429,
 				headers: {
 					'X-RateLimit-Remaining': '0',
-					'X-RateLimit-Reset': (Date.now() + rate_limit).toString(),
+					'X-RateLimit-Reset': (Date.now() + rate_limit_ms).toString(),
 				},
 			})
 		} else {
