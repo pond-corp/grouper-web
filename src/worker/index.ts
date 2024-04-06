@@ -1,7 +1,10 @@
-// api.ts
-//
 
-import { Request, Response } from "@cloudflare/workers-types";
+// api.ts
+// the entry point for the worker
+// @kalrnlo
+// 05/04/2024
+
+import { Request, ExecutionContext } from "@cloudflare/workers-types";
 import { config, universe_ids, place_join_urls } from "../util/config";
 import { oidcAuthMiddleware } from "@hono/oidc-auth";
 import { Hono, HonoRequest } from "hono";
@@ -52,4 +55,8 @@ app.route("/events");
 app.route("/forms");
 app.route("/api", api);
 
-export default app;
+export default {
+	async fetch(request: Request, env: any, ctx: ExecutionContext) {
+		return app.fetch(request as any, env, ctx)
+	},
+}
