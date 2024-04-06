@@ -14,28 +14,28 @@ const x = submission_policy.unlimited
 type question<T extends number & tags.Type<"uint32">, U> = {
     answers: Map<U, boolean>,
     description: string?,
-    name: string,
+    name: string & typia.tags.ExclusiveMaximum<20>,
     type: T,
 }
 
 export type scale_question = question<question.scale, number & tags.Type<"uint32">> & {
-    high_end_text: string?,
-    low_end_text: string?,
+    high_end_text: (string & typia.tags.ExclusiveMaximum<20>)?,
+    low_end_text: (string & typia.tags.ExclusiveMaximum<20>)?,
 }
 
 export type multiple_choice_question = question<question.multiple_choice, number & tags.Type<"uint32">> & {
-    answer_names: Array<string>
+    answer_names: Array<string & typia.tags.ExclusiveMaximum<20>>
 }
 
 export type checkboxes_question = question<question.checkboxes, number & tags.Type<"uint32">> & {
     need_all_valid_boxes_to_be_checked: boolean,
-    answer_names: Array<string>
+    answer_names: Array<string & typia.tags.ExclusiveMaximum<20>>
 }
 
 export type text_question<T extends question.essay | question.paragraph | question.sentance> = {
     placeholder: string?,
     description: string?,
-    name: string,
+    name: string & typia.tags.ExclusiveMaximum<20>,
     type: T,
 }
 
