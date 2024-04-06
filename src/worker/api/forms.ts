@@ -1,9 +1,11 @@
-import { Validation } from "@hono/typia-validator";
-import { Hono } from "hono";
 
+
+import { pack_date_u32, unpack_date_u32 } from "../../util/dateutil";
+import { typiaValidator } from "@hono/typia-validator";
+import { Hono } from "hono";
 const app = new Hono();
 
-app.delete("/destroy", function (ctx) {
+app.delete("/destroy", typiaValidator(), function (ctx) {
   return ctx.text("Hello World!");
 });
 

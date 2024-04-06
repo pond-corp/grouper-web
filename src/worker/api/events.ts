@@ -9,9 +9,9 @@ const app = new Hono();
 
 app.delete("/destroy", function (ctx) {});
 
-app.post("/create", function (ctx) {});
+app.post("/create",typiaValidator(),   function (ctx) {});
 
-app.patch("/start", typiaValidator()  (ctx) {});
+app.patch("/start", typiaValidator(),  (ctx) {});
 
 app.patch("/edit", function (ctx) {
   return ctx.text("Hello World!");
