@@ -12,7 +12,7 @@ import api from "./api";
 
 const group_url = `https://roblox.com/groups/${config.id}`;
 
-const request_counts: Map<number, [number, Date]> = new Map()
+const request_counts: Map<string, number> = new Map()
 const odic_middleware = oidcAuthMiddleware();
 const roblox_asns = Array(22697, 132203);
 const socials = config.socials;
@@ -70,36 +70,27 @@ app.route("/api", api);
 
 export default {
 	async fetch(request: Request, env: any, ctx: ExecutionContext) {
-		const ip = request.headers.get('CF-Connecting-IP');
+		const ip: string = request.headers.get('CF-Connecting-IP')
 		let request_count = request_counts.get(ip)
 
 		if (!request_count) {
-			request_count = [1, Date.now()]
-			setTimeout(() => {
-				request_counts[ip]
-			})
-
+			request_count = 1
+			setTimeout((a) => request_counts.delete(a), timeout, ip)
 			request_counts[ip] = request_count
 		}
 	  
-		if (request_count[0] >= max_requests) {
-			const now = Date.now();
-
-			if (now - request_count[1] < rate_limit) {
-				return new Response('Too Many Requests', {
-					status: 429,
-					headers: {
-						'X-RateLimit-Remaining': '0',
-						'X-RateLimit-Reset': (request_count[1] + rate_limit).toString(),
-					},
-				})
-			} else {
-				request_count[0] = 1
-				request_count[1] = now
-		  	}
+		if (request_count >= max_requests) {
+			return new Response('Too Many Requests', {
+				status: 429,
+				headers: {
+					'X-RateLimit-Remaining': '0',
+					'X-RateLimit-Reset': (Date.now() + rate_limit).toString(),
+				},
+			})
 		} else {
-			requestCount[0]++;
+			request_counts[ip]++
 		}
+
 		return app.fetch(request as any, env, ctx)
 	},
 }
