@@ -5,3 +5,4 @@ import { config_template } from "../../confg_types";
 
 export const config: config_template = {} as any;
 export const universe_ids: Array<string> = {} as any;
+export const place_join_urls: Map<string, string> = {} as any;

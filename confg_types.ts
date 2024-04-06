@@ -7,6 +7,7 @@ type opt<T> = T | undefined;
 
 export interface config_template {
   name: string;
+  id: bigint;
 
   event: {
     auto_delete_events_after: string & tags.Format<"duration">;
@@ -19,7 +20,8 @@ export interface config_template {
     [place_name: string]: {
       use_direct_join_urls: boolean;
       universe_id: string;
-      place_id: number;
+      place_id: bigint;
+      is_main: opt<boolean>,
     };
   };
   forms: {
@@ -33,9 +35,7 @@ export interface config_template {
     guilded: opt<string & tags.Format<"url">>;
     discord: opt<string & tags.Format<"url">>;
   }>;
-  theme:
-    | color
-    | {
+  theme: color | {
         primary: color;
         secondary: color;
         tertiary: color;
