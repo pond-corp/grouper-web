@@ -33,13 +33,13 @@ generated_conifg.then(
 			const link2 = encodeURIComponent(`roblox://placeId=${place_id}`);
 			const join_url = `ro.blox.com/Ebh5?af_dp=${link2}&af_web_dp=${link1}`;
 
-			place_join_urls[place_name] = join_url
+			place_join_urls.set(place_name, join_url)
 			
 			if (!universe_ids.includes(place_data.universe_id)) {
 				universe_ids.push(place_data.universe_id);
 			}
 			if (place_data.is_main) {
-				place_join_urls["play"] = join_url
+				place_join_urls.set("play", join_url)
 			}
     	}
 

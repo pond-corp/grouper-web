@@ -12,6 +12,7 @@
     "noUnusedParameters": true,
     "plugins": [{ "transform": "typia/lib/transform" }],
     "types": [
+      "node",
       "@cloudflare/workers-types"
     ],
     "lib": [

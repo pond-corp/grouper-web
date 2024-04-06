@@ -21,7 +21,7 @@ export interface config_template {
       use_direct_join_urls: boolean;
       universe_id: string;
       place_id: bigint;
-      is_main: opt<boolean>,
+      is_main?: boolean,
     };
   };
   forms: {
@@ -31,10 +31,10 @@ export interface config_template {
     auto_delete_reviewed_after: string & tags.Format<"duration">;
     minimum_review_rank: number & tags.Type<"uint32">;
   };
-  socials: opt<{
-    guilded: opt<string & tags.Format<"url">>;
-    discord: opt<string & tags.Format<"url">>;
-  }>;
+  socials?: {
+    guilded?: string & tags.Format<"url">;
+    discord?: string & tags.Format<"url">;
+  };
   theme: color | {
         primary: color;
         secondary: color;
@@ -42,5 +42,5 @@ export interface config_template {
         error: color;
         neutral: color;
         neutral_variant: color;
-      };
+  };
 }
