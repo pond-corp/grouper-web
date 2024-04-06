@@ -4,16 +4,20 @@
 // @kalrnlo
 // 05/04/2024
 
-import { Request, ExecutionContext } from "@cloudflare/workers-types";
+import { Request, ExecutionContext, setTimeout } from "@cloudflare/workers-types";
 import { config, universe_ids, place_join_urls } from "../util/config";
 import { oidcAuthMiddleware } from "@hono/oidc-auth";
 import { Hono, HonoRequest } from "hono";
 import api from "./api";
 
 const group_url = `https://roblox.com/groups/${config.id}`;
+
+const request_counts: Map<number, [number, Date]> = new Map()
 const odic_middleware = oidcAuthMiddleware();
 const roblox_asns = Array(22697, 132203);
 const socials = config.socials;
+const rate_limit = 60 * 100
+const max_requests = 60
 const app = new Hono();
 
 app.use("/api/*", async (ctx, next) => {
@@ -32,6 +36,15 @@ app.use("/api/*", async (ctx, next) => {
 		return odic_middleware(ctx, next);
 	}
 });
+
+// middleware for providing event data
+//app.use("/api/events/*", aysnc (ctx, next) => {
+//
+//})
+// middleware for providing form data
+//app.use("/api/forms/*", aysnc (ctx, next) => {
+//
+//})
 app.use("/panel/*", odic_middleware);
 app.use("/forms/*", odic_middleware);
 
@@ -57,6 +70,36 @@ app.route("/api", api);
 
 export default {
 	async fetch(request: Request, env: any, ctx: ExecutionContext) {
+		const ip = request.headers.get('CF-Connecting-IP');
+		let request_count = request_counts.get(ip)
+
+		if (!request_count) {
+			request_count = [1, Date.now()]
+			setTimeout(() => {
+				request_counts[ip]
+			})
+
+			request_counts[ip] = request_count
+		}
+	  
+		if (request_count[0] >= max_requests) {
+			const now = Date.now();
+
+			if (now - request_count[1] < rate_limit) {
+				return new Response('Too Many Requests', {
+					status: 429,
+					headers: {
+						'X-RateLimit-Remaining': '0',
+						'X-RateLimit-Reset': (request_count[1] + rate_limit).toString(),
+					},
+				})
+			} else {
+				request_count[0] = 1
+				request_count[1] = now
+		  	}
+		} else {
+			requestCount[0]++;
+		}
 		return app.fetch(request as any, env, ctx)
 	},
 }
