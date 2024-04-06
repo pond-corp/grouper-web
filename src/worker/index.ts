@@ -11,7 +11,6 @@ import { Hono, HonoRequest } from "hono";
 import api from "./api";
 
 const group_url = `https://roblox.com/groups/${config.id}`;
-
 const request_counts: Map<string, number> = new Map()
 const odic_middleware = oidcAuthMiddleware();
 const roblox_asns = Array(22697, 132203);
