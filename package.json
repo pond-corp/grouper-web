@@ -2,10 +2,11 @@
   "name": "grouper-web",
   "version": "0.0.2",
   "description": "none",
-  "main": "./functions/index.ts",
+  "main": "./src/worker/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "ts-patch install && typia patch"
+    "build": "ts-node build.ts"
   },
   "repository": {
     "type": "git",
