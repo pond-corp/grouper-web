@@ -1,4 +1,4 @@
-name: grouper-web
+name: build
 
 on:
   push:
@@ -33,6 +33,3 @@ jobs:
      ## run: |
      ##   npm install @cloudflare/wrangler -g
      ##   wrangler publish --env production
-        
-    ##- name: Run
-     ## run: node dist/generated/config/build.js
