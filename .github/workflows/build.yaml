@@ -26,10 +26,3 @@ jobs:
       
     - name: Create config
       run: node dist/generated/config/build.js
-      
-    ##- name: Publish
-    ##  env:
-     ##   CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-     ## run: |
-     ##   npm install @cloudflare/wrangler -g
-     ##   wrangler publish --env production
