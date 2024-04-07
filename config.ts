@@ -16,6 +16,7 @@ export const config: config_template = {
 			use_direct_join_urls: true,
 			universe_id: "",
 			place_id: 0n,
+			is_main: true,
 		},
 		store: {
 			use_direct_join_urls: true,
