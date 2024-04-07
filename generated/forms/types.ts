@@ -251,8 +251,8 @@ export const form_info = Object.freeze({
         const writer = encoder(new $Writer(sizer));
         return writer.buffer();
     },
-    read: (input: Uint8Array): import("typia").Resolved<form_info.form> => {
-        const $Reader = (typia.protobuf.createDecode as any).Reader;
+    read: (input: Uint8Array, errorFactory?: (p: import("typia").TypeGuardError.IProps) => Error): import("typia").Resolved<form_info.form> => { const decode = (input: Uint8Array): import("typia").Resolved<form_info.form> => {
+        const $Reader = (typia.protobuf.createAssertDecode as any).Reader;
         const $pdo0 = (reader: any, length: number = -1): any => {
             length = length < 0 ? reader.size() : reader.index() + length;
             const output = {
@@ -423,7 +423,229 @@ export const form_info = Object.freeze({
         };
         const reader = new $Reader(input);
         return $pdo0(reader);
-    },
+    }; const assert = (input: any, errorFactory?: (p: import("typia").TypeGuardError.IProps) => Error): form_info.form => {
+        const __is = (input: any): input is form_info.form => {
+            const $io0 = (input: any): boolean => "number" === typeof input.delete_after_x_days && (Math.floor(input.delete_after_x_days) === input.delete_after_x_days && 0 <= input.delete_after_x_days && input.delete_after_x_days <= 4294967295) && ("number" === typeof input.min_score_to_pass && (Math.floor(input.min_score_to_pass) === input.min_score_to_pass && 0 <= input.min_score_to_pass && input.min_score_to_pass <= 4294967295)) && "boolean" === typeof input.can_only_have_one_application_pending && ("number" === typeof input.cooldown_days && (Math.floor(input.cooldown_days) === input.cooldown_days && 0 <= input.cooldown_days && input.cooldown_days <= 4294967295)) && ("number" === typeof input.minimum_rank && (Math.floor(input.minimum_rank) === input.minimum_rank && 0 <= input.minimum_rank && input.minimum_rank <= 4294967295)) && ("number" === typeof input.maximum_rank && (Math.floor(input.maximum_rank) === input.maximum_rank && 0 <= input.maximum_rank && input.maximum_rank <= 4294967295)) && (undefined === input.description || "string" === typeof input.description && input.description.length <= 940) && ("string" === typeof input.name && input.name.length <= 20) && ("string" === typeof input.id && /^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(input.id)) && "boolean" === typeof input.can_only_apply_once && (Array.isArray(input.questions) && input.questions.every((elem: any) => "object" === typeof elem && null !== elem && $io1(elem))) && "boolean" === typeof input.can_apply_in_game && "boolean" === typeof input.requires_discord && "boolean" === typeof input.auto_grade;
+            const $io1 = (input: any): boolean => (undefined === input.answers || input.answers instanceof Map && (() => [...input.answers].every((elem: any) => Array.isArray(elem) && (elem.length === 2 && ("number" === typeof elem[0] && (Math.floor(elem[0]) === elem[0] && 0 <= elem[0] && elem[0] <= 4294967295)) && "boolean" === typeof elem[1])))()) && (undefined === input.answer_names || Array.isArray(input.answer_names) && input.answer_names.every((elem: any) => "string" === typeof elem && elem.length <= 20)) && (undefined === input.need_all_valid_boxes_to_be_checked || "boolean" === typeof input.need_all_valid_boxes_to_be_checked) && (undefined === input.placeholder || "string" === typeof input.placeholder && input.placeholder.length <= 3055) && (undefined === input.high_end_text || "string" === typeof input.high_end_text && input.high_end_text.length <= 20) && (undefined === input.description || "string" === typeof input.description && input.description.length <= 940) && (undefined === input.low_end_text || "string" === typeof input.low_end_text && input.low_end_text.length <= 20) && ("string" === typeof input.name && input.name.length <= 20) && ("number" === typeof input.type && (Math.floor(input.type) === input.type && 0 <= input.type && input.type <= 4294967295));
+            return "object" === typeof input && null !== input && $io0(input);
+        };
+        if (false === __is(input))
+            ((input: any, _path: string, _exceptionable: boolean = true): input is form_info.form => {
+                const $guard = (typia.protobuf.createAssertDecode as any).guard;
+                const $ao0 = (input: any, _path: string, _exceptionable: boolean = true): boolean => ("number" === typeof input.delete_after_x_days && (Math.floor(input.delete_after_x_days) === input.delete_after_x_days && 0 <= input.delete_after_x_days && input.delete_after_x_days <= 4294967295 || $guard(_exceptionable, {
+                    path: _path + ".delete_after_x_days",
+                    expected: "number & Type<\"uint32\">",
+                    value: input.delete_after_x_days
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".delete_after_x_days",
+                    expected: "(number & Type<\"uint32\">)",
+                    value: input.delete_after_x_days
+                }, errorFactory)) && ("number" === typeof input.min_score_to_pass && (Math.floor(input.min_score_to_pass) === input.min_score_to_pass && 0 <= input.min_score_to_pass && input.min_score_to_pass <= 4294967295 || $guard(_exceptionable, {
+                    path: _path + ".min_score_to_pass",
+                    expected: "number & Type<\"uint32\">",
+                    value: input.min_score_to_pass
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".min_score_to_pass",
+                    expected: "(number & Type<\"uint32\">)",
+                    value: input.min_score_to_pass
+                }, errorFactory)) && ("boolean" === typeof input.can_only_have_one_application_pending || $guard(_exceptionable, {
+                    path: _path + ".can_only_have_one_application_pending",
+                    expected: "boolean",
+                    value: input.can_only_have_one_application_pending
+                }, errorFactory)) && ("number" === typeof input.cooldown_days && (Math.floor(input.cooldown_days) === input.cooldown_days && 0 <= input.cooldown_days && input.cooldown_days <= 4294967295 || $guard(_exceptionable, {
+                    path: _path + ".cooldown_days",
+                    expected: "number & Type<\"uint32\">",
+                    value: input.cooldown_days
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".cooldown_days",
+                    expected: "(number & Type<\"uint32\">)",
+                    value: input.cooldown_days
+                }, errorFactory)) && ("number" === typeof input.minimum_rank && (Math.floor(input.minimum_rank) === input.minimum_rank && 0 <= input.minimum_rank && input.minimum_rank <= 4294967295 || $guard(_exceptionable, {
+                    path: _path + ".minimum_rank",
+                    expected: "number & Type<\"uint32\">",
+                    value: input.minimum_rank
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".minimum_rank",
+                    expected: "(number & Type<\"uint32\">)",
+                    value: input.minimum_rank
+                }, errorFactory)) && ("number" === typeof input.maximum_rank && (Math.floor(input.maximum_rank) === input.maximum_rank && 0 <= input.maximum_rank && input.maximum_rank <= 4294967295 || $guard(_exceptionable, {
+                    path: _path + ".maximum_rank",
+                    expected: "number & Type<\"uint32\">",
+                    value: input.maximum_rank
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".maximum_rank",
+                    expected: "(number & Type<\"uint32\">)",
+                    value: input.maximum_rank
+                }, errorFactory)) && (undefined === input.description || "string" === typeof input.description && (input.description.length <= 940 || $guard(_exceptionable, {
+                    path: _path + ".description",
+                    expected: "string & MaxLength<940>",
+                    value: input.description
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".description",
+                    expected: "((string & MaxLength<940>) | undefined)",
+                    value: input.description
+                }, errorFactory)) && ("string" === typeof input.name && (input.name.length <= 20 || $guard(_exceptionable, {
+                    path: _path + ".name",
+                    expected: "string & MaxLength<20>",
+                    value: input.name
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".name",
+                    expected: "(string & MaxLength<20>)",
+                    value: input.name
+                }, errorFactory)) && ("string" === typeof input.id && (/^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(input.id) || $guard(_exceptionable, {
+                    path: _path + ".id",
+                    expected: "string & Format<\"uuid\">",
+                    value: input.id
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".id",
+                    expected: "(string & Format<\"uuid\">)",
+                    value: input.id
+                }, errorFactory)) && ("boolean" === typeof input.can_only_apply_once || $guard(_exceptionable, {
+                    path: _path + ".can_only_apply_once",
+                    expected: "boolean",
+                    value: input.can_only_apply_once
+                }, errorFactory)) && ((Array.isArray(input.questions) || $guard(_exceptionable, {
+                    path: _path + ".questions",
+                    expected: "Array<form_info.merged_question>",
+                    value: input.questions
+                }, errorFactory)) && input.questions.every((elem: any, _index1: number) => ("object" === typeof elem && null !== elem || $guard(_exceptionable, {
+                    path: _path + ".questions[" + _index1 + "]",
+                    expected: "form_info.merged_question",
+                    value: elem
+                }, errorFactory)) && $ao1(elem, _path + ".questions[" + _index1 + "]", true && _exceptionable) || $guard(_exceptionable, {
+                    path: _path + ".questions[" + _index1 + "]",
+                    expected: "form_info.merged_question",
+                    value: elem
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".questions",
+                    expected: "Array<form_info.merged_question>",
+                    value: input.questions
+                }, errorFactory)) && ("boolean" === typeof input.can_apply_in_game || $guard(_exceptionable, {
+                    path: _path + ".can_apply_in_game",
+                    expected: "boolean",
+                    value: input.can_apply_in_game
+                }, errorFactory)) && ("boolean" === typeof input.requires_discord || $guard(_exceptionable, {
+                    path: _path + ".requires_discord",
+                    expected: "boolean",
+                    value: input.requires_discord
+                }, errorFactory)) && ("boolean" === typeof input.auto_grade || $guard(_exceptionable, {
+                    path: _path + ".auto_grade",
+                    expected: "boolean",
+                    value: input.auto_grade
+                }, errorFactory));
+                const $ao1 = (input: any, _path: string, _exceptionable: boolean = true): boolean => (undefined === input.answers || (input.answers instanceof Map || $guard(_exceptionable, {
+                    path: _path + ".answers",
+                    expected: "(Map<(number & Type<\"uint32\">), boolean> | undefined)",
+                    value: input.answers
+                }, errorFactory)) && (() => [...input.answers].every((elem: any, _index2: number) => (Array.isArray(elem) || $guard(_exceptionable, {
+                    path: _path + ".answers[" + _index2 + "]",
+                    expected: "[(number & Type<\"uint32\">), boolean]",
+                    value: elem
+                }, errorFactory)) && ((elem.length === 2 || $guard(_exceptionable, {
+                    path: _path + ".answers[" + _index2 + "]",
+                    expected: "[(number & Type<\"uint32\">), boolean]",
+                    value: elem
+                }, errorFactory)) && ("number" === typeof elem[0] && (Math.floor(elem[0]) === elem[0] && 0 <= elem[0] && elem[0] <= 4294967295 || $guard(_exceptionable, {
+                    path: _path + ".answers[" + _index2 + "][0]",
+                    expected: "number & Type<\"uint32\">",
+                    value: elem[0]
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".answers[" + _index2 + "][0]",
+                    expected: "(number & Type<\"uint32\">)",
+                    value: elem[0]
+                }, errorFactory)) && ("boolean" === typeof elem[1] || $guard(_exceptionable, {
+                    path: _path + ".answers[" + _index2 + "][1]",
+                    expected: "boolean",
+                    value: elem[1]
+                }, errorFactory))) || $guard(_exceptionable, {
+                    path: _path + ".answers[" + _index2 + "]",
+                    expected: "[(number & Type<\"uint32\">), boolean]",
+                    value: elem
+                }, errorFactory)))() || $guard(_exceptionable, {
+                    path: _path + ".answers",
+                    expected: "(Map<(number & Type<\"uint32\">), boolean> | undefined)",
+                    value: input.answers
+                }, errorFactory)) && (undefined === input.answer_names || (Array.isArray(input.answer_names) || $guard(_exceptionable, {
+                    path: _path + ".answer_names",
+                    expected: "(Array<string & MaxLength<20>> | undefined)",
+                    value: input.answer_names
+                }, errorFactory)) && input.answer_names.every((elem: any, _index3: number) => "string" === typeof elem && (elem.length <= 20 || $guard(_exceptionable, {
+                    path: _path + ".answer_names[" + _index3 + "]",
+                    expected: "string & MaxLength<20>",
+                    value: elem
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".answer_names[" + _index3 + "]",
+                    expected: "(string & MaxLength<20>)",
+                    value: elem
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".answer_names",
+                    expected: "(Array<string & MaxLength<20>> | undefined)",
+                    value: input.answer_names
+                }, errorFactory)) && (undefined === input.need_all_valid_boxes_to_be_checked || "boolean" === typeof input.need_all_valid_boxes_to_be_checked || $guard(_exceptionable, {
+                    path: _path + ".need_all_valid_boxes_to_be_checked",
+                    expected: "(boolean | undefined)",
+                    value: input.need_all_valid_boxes_to_be_checked
+                }, errorFactory)) && (undefined === input.placeholder || "string" === typeof input.placeholder && (input.placeholder.length <= 3055 || $guard(_exceptionable, {
+                    path: _path + ".placeholder",
+                    expected: "string & MaxLength<3055>",
+                    value: input.placeholder
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".placeholder",
+                    expected: "((string & MaxLength<3055>) | undefined)",
+                    value: input.placeholder
+                }, errorFactory)) && (undefined === input.high_end_text || "string" === typeof input.high_end_text && (input.high_end_text.length <= 20 || $guard(_exceptionable, {
+                    path: _path + ".high_end_text",
+                    expected: "string & MaxLength<20>",
+                    value: input.high_end_text
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".high_end_text",
+                    expected: "((string & MaxLength<20>) | undefined)",
+                    value: input.high_end_text
+                }, errorFactory)) && (undefined === input.description || "string" === typeof input.description && (input.description.length <= 940 || $guard(_exceptionable, {
+                    path: _path + ".description",
+                    expected: "string & MaxLength<940>",
+                    value: input.description
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".description",
+                    expected: "((string & MaxLength<940>) | undefined)",
+                    value: input.description
+                }, errorFactory)) && (undefined === input.low_end_text || "string" === typeof input.low_end_text && (input.low_end_text.length <= 20 || $guard(_exceptionable, {
+                    path: _path + ".low_end_text",
+                    expected: "string & MaxLength<20>",
+                    value: input.low_end_text
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".low_end_text",
+                    expected: "((string & MaxLength<20>) | undefined)",
+                    value: input.low_end_text
+                }, errorFactory)) && ("string" === typeof input.name && (input.name.length <= 20 || $guard(_exceptionable, {
+                    path: _path + ".name",
+                    expected: "string & MaxLength<20>",
+                    value: input.name
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".name",
+                    expected: "(string & MaxLength<20>)",
+                    value: input.name
+                }, errorFactory)) && ("number" === typeof input.type && (Math.floor(input.type) === input.type && 0 <= input.type && input.type <= 4294967295 || $guard(_exceptionable, {
+                    path: _path + ".type",
+                    expected: "number & Type<\"uint32\">",
+                    value: input.type
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".type",
+                    expected: "(number & Type<\"uint32\">)",
+                    value: input.type
+                }, errorFactory));
+                return ("object" === typeof input && null !== input || $guard(true, {
+                    path: _path + "",
+                    expected: "form_info.form",
+                    value: input
+                }, errorFactory)) && $ao0(input, _path + "", true) || $guard(true, {
+                    path: _path + "",
+                    expected: "form_info.form",
+                    value: input
+                }, errorFactory);
+            })(input, "$input", true);
+        return input;
+    }; const output = decode(input); return assert(output, errorFactory) as any; },
     question: Object.freeze({
         is_multiple_choice: create_question_validator<form_info.multiple_choice_question>(question.multiple_choice),
         is_checkboxes: create_question_validator<form_info.checkboxes_question>(question.checkboxes),
@@ -498,8 +720,8 @@ export const submission = Object.freeze({
         const writer = encoder(new $Writer(sizer));
         return writer.buffer();
     },
-    read: (input: Uint8Array): import("typia").Resolved<form_submission.form_submission> => {
-        const $Reader = (typia.protobuf.createDecode as any).Reader;
+    read: (input: Uint8Array, errorFactory?: (p: import("typia").TypeGuardError.IProps) => Error): import("typia").Resolved<form_submission.form_submission> => { const decode = (input: Uint8Array): import("typia").Resolved<form_submission.form_submission> => {
+        const $Reader = (typia.protobuf.createAssertDecode as any).Reader;
         const $pdo0 = (reader: any, length: number = -1): any => {
             length = length < 0 ? reader.size() : reader.index() + length;
             const output = {
@@ -571,7 +793,93 @@ export const submission = Object.freeze({
         };
         const reader = new $Reader(input);
         return $pdo0(reader);
-    },
+    }; const assert = (input: any, errorFactory?: (p: import("typia").TypeGuardError.IProps) => Error): form_submission.form_submission => {
+        const __is = (input: any): input is form_submission.form_submission => {
+            const $io0 = (input: any): boolean => "string" === typeof input.id && /^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(input.id) && (Array.isArray(input.answers) && input.answers.every((elem: any) => "object" === typeof elem && null !== elem && $io1(elem))) && "bigint" === typeof input.user_id;
+            const $io1 = (input: any): boolean => (undefined === input.answers || Array.isArray(input.answers) && input.answers.every((elem: any) => "number" === typeof elem && (Math.floor(elem) === elem && 0 <= elem && elem <= 4294967295))) && (undefined === input.answer || "number" === typeof input.answer && (Math.floor(input.answer) === input.answer && 0 <= input.answer && input.answer <= 4294967295 || input.answer < 10 && 1 < input.answer && (Math.floor(input.answer) === input.answer && 0 <= input.answer && input.answer <= 4294967295)) || "string" === typeof input.answer && (input.answer.length <= 940 || input.answer.length <= 3055 || input.answer.length <= 94)) && ("number" === typeof input.type && (Math.floor(input.type) === input.type && 0 <= input.type && input.type <= 4294967295));
+            return "object" === typeof input && null !== input && $io0(input);
+        };
+        if (false === __is(input))
+            ((input: any, _path: string, _exceptionable: boolean = true): input is form_submission.form_submission => {
+                const $guard = (typia.protobuf.createAssertDecode as any).guard;
+                const $ao0 = (input: any, _path: string, _exceptionable: boolean = true): boolean => ("string" === typeof input.id && (/^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(input.id) || $guard(_exceptionable, {
+                    path: _path + ".id",
+                    expected: "string & Format<\"uuid\">",
+                    value: input.id
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".id",
+                    expected: "(string & Format<\"uuid\">)",
+                    value: input.id
+                }, errorFactory)) && ((Array.isArray(input.answers) || $guard(_exceptionable, {
+                    path: _path + ".answers",
+                    expected: "Array<form_submission.merged_question>",
+                    value: input.answers
+                }, errorFactory)) && input.answers.every((elem: any, _index1: number) => ("object" === typeof elem && null !== elem || $guard(_exceptionable, {
+                    path: _path + ".answers[" + _index1 + "]",
+                    expected: "form_submission.merged_question",
+                    value: elem
+                }, errorFactory)) && $ao1(elem, _path + ".answers[" + _index1 + "]", true && _exceptionable) || $guard(_exceptionable, {
+                    path: _path + ".answers[" + _index1 + "]",
+                    expected: "form_submission.merged_question",
+                    value: elem
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".answers",
+                    expected: "Array<form_submission.merged_question>",
+                    value: input.answers
+                }, errorFactory)) && ("bigint" === typeof input.user_id || $guard(_exceptionable, {
+                    path: _path + ".user_id",
+                    expected: "bigint",
+                    value: input.user_id
+                }, errorFactory));
+                const $ao1 = (input: any, _path: string, _exceptionable: boolean = true): boolean => (undefined === input.answers || (Array.isArray(input.answers) || $guard(_exceptionable, {
+                    path: _path + ".answers",
+                    expected: "(Array<number & Type<\"uint32\">> | undefined)",
+                    value: input.answers
+                }, errorFactory)) && input.answers.every((elem: any, _index2: number) => "number" === typeof elem && (Math.floor(elem) === elem && 0 <= elem && elem <= 4294967295 || $guard(_exceptionable, {
+                    path: _path + ".answers[" + _index2 + "]",
+                    expected: "number & Type<\"uint32\">",
+                    value: elem
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".answers[" + _index2 + "]",
+                    expected: "(number & Type<\"uint32\">)",
+                    value: elem
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".answers",
+                    expected: "(Array<number & Type<\"uint32\">> | undefined)",
+                    value: input.answers
+                }, errorFactory)) && (undefined === input.answer || "number" === typeof input.answer && (Math.floor(input.answer) === input.answer && 0 <= input.answer && input.answer <= 4294967295 || input.answer < 10 && 1 < input.answer && (Math.floor(input.answer) === input.answer && 0 <= input.answer && input.answer <= 4294967295) || $guard(_exceptionable, {
+                    path: _path + ".answer",
+                    expected: "(number & (Type<\"uint32\"> | (ExclusiveMaximum<10> & ExclusiveMinimum<1> & Type<\"uint32\">)))",
+                    value: input.answer
+                }, errorFactory)) || "string" === typeof input.answer && (input.answer.length <= 940 || input.answer.length <= 3055 || input.answer.length <= 94 || $guard(_exceptionable, {
+                    path: _path + ".answer",
+                    expected: "(string & (MaxLength<940> | MaxLength<3055> | MaxLength<94>))",
+                    value: input.answer
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".answer",
+                    expected: "((number & (Type<\"uint32\"> | (ExclusiveMaximum<10> & ExclusiveMinimum<1> & Type<\"uint32\">))) | (string & (MaxLength<940> | MaxLength<3055> | MaxLength<94>)) | undefined)",
+                    value: input.answer
+                }, errorFactory)) && ("number" === typeof input.type && (Math.floor(input.type) === input.type && 0 <= input.type && input.type <= 4294967295 || $guard(_exceptionable, {
+                    path: _path + ".type",
+                    expected: "number & Type<\"uint32\">",
+                    value: input.type
+                }, errorFactory)) || $guard(_exceptionable, {
+                    path: _path + ".type",
+                    expected: "(number & Type<\"uint32\">)",
+                    value: input.type
+                }, errorFactory));
+                return ("object" === typeof input && null !== input || $guard(true, {
+                    path: _path + "",
+                    expected: "form_submission.form_submission",
+                    value: input
+                }, errorFactory)) && $ao0(input, _path + "", true) || $guard(true, {
+                    path: _path + "",
+                    expected: "form_submission.form_submission",
+                    value: input
+                }, errorFactory);
+            })(input, "$input", true);
+        return input;
+    }; const output = decode(input); return assert(output, errorFactory) as any; },
     question: (form_info.question as unknown) as Readonly<{
         is_multiple_choice: typeof create_question_validator<form_submission.multiple_choice_question>;
         is_checkboxes: typeof create_question_validator<form_submission.checkboxes_question>;

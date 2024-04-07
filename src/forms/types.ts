@@ -144,7 +144,7 @@ function create_question_validator<T>(question_type: question): (<U>(value: U & 
 
 export const form_info = Object.freeze({
     write: typia.protobuf.createEncode<form_info.form>(),
-    read: typia.protobuf.createDecode<form_info.form>(),
+    read: typia.protobuf.createAssertDecode<form_info.form>((() => new Error()) as any),
     question: Object.freeze({
         is_multiple_choice: create_question_validator<form_info.multiple_choice_question>(question.multiple_choice),
         is_checkboxes: create_question_validator<form_info.checkboxes_question>(question.checkboxes),
@@ -157,7 +157,7 @@ export const form_info = Object.freeze({
 
 export const submission = Object.freeze({
     write: typia.protobuf.createEncode<form_submission.form_submission>(),
-    read: typia.protobuf.createDecode<form_submission.form_submission>(),
+    read: typia.protobuf.createAssertDecode<form_submission.form_submission>((() => new Error()) as any),
     question: (form_info.question as unknown) as Readonly<{
         is_multiple_choice: typeof create_question_validator<form_submission.multiple_choice_question>,
         is_checkboxes: typeof create_question_validator<form_submission.checkboxes_question>,
