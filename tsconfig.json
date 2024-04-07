@@ -2,26 +2,27 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "declaration": true,
+    "declaration": false,
     "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "noUnusedLocals": false,
     "noUnusedParameters": true,
     "plugins": [{ "transform": "typia/lib/transform" }],
-    "types": [
-      "node",
-      "@cloudflare/workers-types"
-    ],
-    "lib": [
-      "ESNext",
-    ],
+    "types": ["node", "@cloudflare/workers-types"],
+    "lib": ["ESNext"],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "outDir": "dist",
   },
-  "exclude": ["node_modules", "dist"],
-  "include": ["src", "build.ts", "config.ts", "config_types.ts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "/src/config/types",
+    "src/types"
+  ],
+  "include": ["generated"]
 }

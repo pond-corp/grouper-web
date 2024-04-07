@@ -12,27 +12,30 @@ import { MdChipSet } from "@material/web/chips/chip-set"
 import { createComponent } from "@lit/react";
 import React from "react"
 
-const class chips {
-	static suggest = createComponent({
+export default Object.freeze({
+	suggest: createComponent({
 		react: React,
 		elementClass: MdSuggestionChip,
 		tagName: "suggest-chip",
-	})
-	static assist = createComponent({
+	}),
+	assist: createComponent({
 		react: React,
 		elementClass: MdAssistChip,
 		tagName: "assist-chip",
-	})
-	static filter = createComponent({
+	}),
+	filter: createComponent({
 		react: React,
 		elementClass: MdFilterChip,
 		tagName: "filter-chip",
-	})
-	static input = createComponent({
+	}),
+	input: createComponent({
 		react: React,
 		elementClass: MdInputChip,
 		tagName: "input-chip",
+	}),
+	set: createComponent({
+		react: React,
+		elementClass: MdChipSet,
+		tagName: "chip-set",
 	})
-}
-
-export defualt Object.freeze(chips)
+})

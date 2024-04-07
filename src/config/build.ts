@@ -4,21 +4,18 @@
 // @kalrnlo
 // 05/04/2024
 
-import { config_template } from "./confg_types";
-import { config } from "./config";
+import { validate, config_template } from "./types";
+import { config } from "../../config";
 import util from "node:util";
-import typia from "typia";
 import fs from "node:fs";
 
 const color_regex = /\b(hex\(#?([0-9a-fA-F]{6})\))|hct\((\d+(?:\.\d+)?),\s*(\d+(?:\.\d+)?),\s*(\d+(?:\.\d+)?)\))\b/;
-
-const current_date = new Date();
-
 const generated_conifg = Promise.resolve(config instanceof Function ? config() : config);
+const current_date = new Date();
 
 generated_conifg.then(
 	function (config_object: config_template) {
-    	const result: typia.IValidation<config_template> = typia.validate(config_object as any);
+    	const result = validate(config_object)
 
 		if (!result.success) {
 			console.error(`Config provided is invalid\n\t${result.errors}`);
@@ -60,6 +57,6 @@ generated_conifg.then(
 			export const config = Object.freeze(${config_string})
 		`;
 
-    	fs.writeFileSync("../src/util/config.ts", file_string);
+    	fs.writeFileSync("../src/util/config.js", file_string);
   }, (reason) => console.error(`An error occurred whilst generating the config file ${reason}`)
 );
