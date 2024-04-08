@@ -5,16 +5,17 @@
 // 05/04/2024
 
 import { Request, ExecutionContext, setTimeout } from "@cloudflare/workers-types";
-import { config, universe_ids, place_join_urls } from "../util/config";
+import {config} from "../../config";
 import { oidcAuthMiddleware } from "@hono/oidc-auth";
 import { Hono, HonoRequest } from "hono";
 import api from "./api";
 
-const group_url = `https://roblox.com/groups/${config.id}`;
+const group_url = `https://roblox.com/groups/${config.raw.id}`;
 const request_counts: Map<string, number> = new Map();
 const odic_middleware = oidcAuthMiddleware();
 const roblox_asns = Array(22697, 132203);
-const socials = config.socials;
+const universe_ids = config.universe_ids
+const socials = config.raw.socials;
 const rate_limit_ms = 60000;
 const rate_limit = 60 * 100;
 const max_requests = 48;
@@ -58,7 +59,7 @@ if (socials) {
         app.get("/guilded", (ctx) => ctx.redirect(guilded));
     }
 }
-for (const [place_name, join_url] of Object.entries(place_join_urls)) {
+for (const [place_name, join_url] of Object.entries(config.place_join_urls)) {
     app.get(`/${place_name}`, (ctx) => ctx.redirect(join_url));
 }
 app.get("/group", (ctx) => ctx.redirect(group_url));

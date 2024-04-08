@@ -33,8 +33,7 @@ export interface config_template {
     guilded?: string & tags.Format<"url">;
     discord?: string & tags.Format<"url">;
   };
-  theme: string
-    | {
+  theme: string | {
         primary: string;
         secondary: string;
         tertiary: string;

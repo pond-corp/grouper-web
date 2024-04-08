@@ -1,6 +1,6 @@
-import { config_template } from "./src/config/types";
+import gen from "./src/config/gen"
 
-export const config: config_template = {
+export const config = gen({
 	name: "grouper-web",
 	id: 0n,
 
@@ -35,4 +35,4 @@ export const config: config_template = {
 	socials: {
 		discord: "",
 	},
-};
+})
