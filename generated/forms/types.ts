@@ -251,7 +251,7 @@ export const form_info = Object.freeze({
         const writer = encoder(new $Writer(sizer));
         return writer.buffer();
     },
-    read: (input: Uint8Array, errorFactory?: (p: import("typia").TypeGuardError.IProps) => Error): import("typia").Resolved<form_info.form> => { const decode = (input: Uint8Array): import("typia").Resolved<form_info.form> => {
+    read: (input: Uint8Array, errorFactory: (p: import("typia").TypeGuardError.IProps) => Error = (() => new Error()) as any): import("typia").Resolved<form_info.form> => { const decode = (input: Uint8Array): import("typia").Resolved<form_info.form> => {
         const $Reader = (typia.protobuf.createAssertDecode as any).Reader;
         const $pdo0 = (reader: any, length: number = -1): any => {
             length = length < 0 ? reader.size() : reader.index() + length;
@@ -720,7 +720,7 @@ export const submission = Object.freeze({
         const writer = encoder(new $Writer(sizer));
         return writer.buffer();
     },
-    read: (input: Uint8Array, errorFactory?: (p: import("typia").TypeGuardError.IProps) => Error): import("typia").Resolved<form_submission.form_submission> => { const decode = (input: Uint8Array): import("typia").Resolved<form_submission.form_submission> => {
+    read: (input: Uint8Array, errorFactory: (p: import("typia").TypeGuardError.IProps) => Error = (() => new Error()) as any): import("typia").Resolved<form_submission.form_submission> => { const decode = (input: Uint8Array): import("typia").Resolved<form_submission.form_submission> => {
         const $Reader = (typia.protobuf.createAssertDecode as any).Reader;
         const $pdo0 = (reader: any, length: number = -1): any => {
             length = length < 0 ? reader.size() : reader.index() + length;

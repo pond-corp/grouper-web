@@ -33,14 +33,14 @@ export interface config_template {
     guilded?: string & tags.Format<"url">;
     discord?: string & tags.Format<"url">;
   };
-  theme: string | {
+	theme: string | {
+		neutral_variant?: string;
+		secondary?: string;
+        tertiary?: string;
+		neutral?: string;
         primary: string;
-        secondary: string;
-        tertiary: string;
-        error: string;
-        neutral: string;
-        neutral_variant: string;
-      };
+        error?: string;
+	};
 }
 
-export const validate = typia.createValidateEquals<config_template>()
+export const validate = typia.createAssertEquals<config_template>()

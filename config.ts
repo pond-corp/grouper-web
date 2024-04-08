@@ -32,7 +32,4 @@ export default gen({
 		minimum_review_rank: 30,
 	},
 	theme: "hex(#FFFFFF)",
-	socials: {
-		discord: "",
-	},
 })
