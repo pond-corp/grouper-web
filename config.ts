@@ -1,6 +1,6 @@
 import gen from "./src/config/gen"
 
-export const config = gen({
+export default gen({
 	name: "grouper-web",
 	id: 0n,
 
